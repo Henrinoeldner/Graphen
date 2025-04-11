@@ -1,16 +1,15 @@
 import untils.*;
 import untils.graph.*;
-
 public class verwaltung {
     public static void main(String[] args) {
         new verwaltung();
         System.out.println("Herzlich willkommen zu Zeichenketten verschluesselerer!");
     }
     public verwaltung(){
-        Graph schulgraph=   new Graph();
-        schulgraph.addVertex(new Vertex("Inforaum -1.030"));
-        schulgraph.addVertex(new Vertex("Aula"));
-        schulgraph.getVertex(new Vertex());
-        schulgraph.addEdge(new Edge(schulgraph.getVertex("Inforaum -1.030"),schulgraph.getVertex("Aula"),18));
+        Graph FRG=   new Graph();
+        FRG.addVertex(new Vertex("Inforaum -1.030"));
+        FRG.addVertex(new Vertex("Aula"));
+        FRG.getVertex(new Vertex());
+        FRG.addEdge(new Edge(FRG.getVertex("Inforaum -1.030"),FRG.getVertex("Aula"),18));
     }
 }
