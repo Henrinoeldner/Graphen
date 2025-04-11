@@ -13,4 +13,5 @@ public class verwaltung {
         schulgraph.getVertex(new Vertex());
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Inforaum -1.030"),schulgraph.getVertex("Aula"),18));
     }
+    penis
 }
