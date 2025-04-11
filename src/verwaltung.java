@@ -10,7 +10,7 @@ public class verwaltung {
         Graph schulgraph=   new Graph();
         schulgraph.addVertex(new Vertex("Inforaum -1.030"));
         schulgraph.addVertex(new Vertex("Aula"));
-        schulgraph.getVertex(new Vertex());
+        schulgraph.addVertex(new Vertex("PZ"));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Inforaum -1.030"),schulgraph.getVertex("Aula"),18));
     }
 }
