@@ -1,14 +1,17 @@
 import untils.*;
 import untils.graph.*;
 
+import java.util.Scanner;
+
 public class verwaltung {
+    Graph schulgraph=   new Graph();
+    Scanner scanner=new Scanner(System.in);
     public static void main(String[] args) {
         System.out.println("Herzlich willkommen zu Schulenavigator !");
         new verwaltung();
 
     }
     public verwaltung(){
-        Graph schulgraph=   new Graph();
         schulgraph.addVertex(new Vertex("Inforaum -1030"));
         schulgraph.addVertex(new Vertex("Aula"));
         schulgraph.addVertex(new Vertex("PZ"));
@@ -22,14 +25,13 @@ public class verwaltung {
         schulgraph.addVertex(new Vertex("Musikraum -1008"));
         schulgraph.addVertex(new Vertex("Sporthalle"));
         schulgraph.addVertex(new Vertex("Radkeller"));
-        schulgraph.addVertex(new Vertex("Sporthalle"));
         schulgraph.addVertex(new Vertex("TischtenPlatten"));
         schulgraph.addVertex(new Vertex("Tor(SF)"));
         schulgraph.addVertex(new Vertex("Fußballplatz"));
         schulgraph.addVertex(new Vertex("Schulzoo"));
-        schulgraph.addVertex(new Vertex("Inforaum -1.029"));
-        schulgraph.addVertex(new Vertex("Chemiraum 1.031"));
-        schulgraph.addVertex(new Vertex("Bioraum 1.028"));
+        schulgraph.addVertex(new Vertex("Inforaum -1029"));
+        schulgraph.addVertex(new Vertex("Chemiraum 1031"));
+        schulgraph.addVertex(new Vertex("Bioraum 1028"));
         schulgraph.addVertex(new Vertex("Treppenhaus NW Trakt"));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Mensa"),schulgraph.getVertex("Lehrerzimmer"),96));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Mensa"),schulgraph.getVertex("Cafeteria"),7));
@@ -69,10 +71,66 @@ public class verwaltung {
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Lehrerzimmer"),schulgraph.getVertex("Radkeller"),27));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Secretariat"),schulgraph.getVertex("Radkeller"),26));
 
-        List speicher= schulgraph.getNeighbours(schulgraph.getVertex("Mensa"));
+/*
+        System.out.println("Von welchen Ort möchtest du die Nachbarn wissen?");
+        Vertex gesucht = schulgraph.getVertex(scanner.nextLine());
+        List<Vertex> speicher= schulgraph.getNeighbours(gesucht);
+        speicher.toFirst();
         while (speicher.hasAccess()){
-            System.out.println(speicher.getContent().getID());
+            System.out.print(speicher.getContent().getID()+" entfernung: ");
+            System.out.println(schulgraph.getEdge(gesucht,speicher.getContent()).getWeight()+" meter");
+            speicher.next();
         }
-        
+        */
+
+        this.Breitensuche();
+        this.matrixaudgabe();
+    }
+
+    public List<Vertex> Breitensuche(){
+        List<Vertex> ruekgabeListe=new List<>();
+        Queue<Vertex> zubesuchen= new Queue<>();
+        List<Vertex> ergebinsListe=new List<>();
+        zubesuchen.enqueue(schulgraph.getVertex("Inforaum -1030"));
+        zubesuchen.front().setMark(true);
+        do{
+            System.out.println(zubesuchen.front().getID());
+            ruekgabeListe.append(zubesuchen.front());
+            ergebinsListe=schulgraph.getNeighbours(zubesuchen.front());
+            ergebinsListe.toFirst();
+            while (ergebinsListe.hasAccess()){
+                if (!ergebinsListe.getContent().isMarked()){
+                    zubesuchen.enqueue(ergebinsListe.getContent());
+                    ergebinsListe.getContent().setMark(true);
+                }
+                ergebinsListe.next();
+            }
+            zubesuchen.dequeue();
+        }while(!zubesuchen.isEmpty());
+        schulgraph.setAllVertexMarks(false);
+        return  ruekgabeListe;
+    }
+
+    public String[][] matrixaudgabe(){
+        List<Vertex> speicher= this.Breitensuche();
+        int lange=0;
+        speicher.toFirst();
+        while (speicher.hasAccess()){
+            lange++;
+            speicher.next();
+        }
+        speicher.toFirst();
+        String[][] rueckgabeMatrix =new String[lange+1][lange+1];
+        for (int i=1;i<lange+1;i++){
+            rueckgabeMatrix[i][0]=speicher.getContent().getID();
+            rueckgabeMatrix[0][i]=speicher.getContent().getID();
+            speicher.next();
+        }
+        for (int i=0;i<(lange)*(lange);i++) {
+            if ((i / lange) + 1 != (i % lange) + 1) {
+                rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1] = "" + schulgraph.getEdge(schulgraph.getVertex(rueckgabeMatrix[0][i + 1]), schulgraph.getVertex(rueckgabeMatrix[i + 1][0])).getWeight();
+            }
+        }
+        return rueckgabeMatrix;
     }
 }
