@@ -84,7 +84,7 @@ public class verwaltung {
         */
 
         this.Breitensuche();
-        this.matrixaudgabe();
+        this.Matrixausgabe(MatrixErstellen());
     }
 
     public List<Vertex> Breitensuche(){
@@ -111,7 +111,7 @@ public class verwaltung {
         return  ruekgabeListe;
     }
 
-    public String[][] matrixaudgabe(){
+    public String[][] MatrixErstellen(){
         List<Vertex> speicher= this.Breitensuche();
         int lange=0;
         speicher.toFirst();
@@ -121,16 +121,42 @@ public class verwaltung {
         }
         speicher.toFirst();
         String[][] rueckgabeMatrix =new String[lange+1][lange+1];
+        rueckgabeMatrix[0][0]="                        ";
         for (int i=1;i<lange+1;i++){
             rueckgabeMatrix[i][0]=speicher.getContent().getID();
             rueckgabeMatrix[0][i]=speicher.getContent().getID();
             speicher.next();
         }
         for (int i=0;i<(lange)*(lange);i++) {
-            if ((i / lange) + 1 != (i % lange) + 1) {
-                rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1] = "" + schulgraph.getEdge(schulgraph.getVertex(rueckgabeMatrix[0][i + 1]), schulgraph.getVertex(rueckgabeMatrix[i + 1][0])).getWeight();
-            }
+            //if ((i / lange) + 1 != (i % lange) + 1) {
+                Edge sp=schulgraph.getEdge(schulgraph.getVertex(rueckgabeMatrix[0][(i % lange) + 1]), schulgraph.getVertex(rueckgabeMatrix[(i / lange) + 1][0]));
+                if (sp!=null) {
+                    rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1] =""+(int)sp.getWeight();
+                }else{
+                    rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1]=" ";
+                }
+            //}
         }
         return rueckgabeMatrix;
+    }
+
+    public void Matrixausgabe(String[][] pMatrix){
+        int spaltenbreite=0;
+        for (int a=0;a< pMatrix.length;a++) {
+            for (int i = 0; i < pMatrix.length; i++) {
+                System.out.print("|"+pMatrix[i][a]);
+                for (int c=pMatrix[i][a].length();c<pMatrix[i][0].length();c++){
+                    System.out.print(" ");
+                }
+                spaltenbreite+=pMatrix[i][0].length()+1;
+            }
+            System.out.println("|");
+            for (int z=0;z<spaltenbreite;z++){
+                System.out.print("-");
+            }
+            System.out.println("-");
+            spaltenbreite=0;
+
+        }
     }
 }
