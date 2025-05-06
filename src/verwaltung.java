@@ -30,7 +30,7 @@ public class verwaltung {
         schulgraph.addVertex(new Vertex("Fußballplatz"));
         schulgraph.addVertex(new Vertex("Schulzoo"));
         schulgraph.addVertex(new Vertex("Inforaum -1029"));
-        schulgraph.addVertex(new Vertex("Chemiraum 1031"));
+        schulgraph.addVertex(new Vertex("Chemieraum 1031"));
         schulgraph.addVertex(new Vertex("Bioraum 1028"));
         schulgraph.addVertex(new Vertex("Treppenhaus NW Trakt"));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Mensa"),schulgraph.getVertex("Lehrerzimmer"),96));
@@ -48,10 +48,10 @@ public class verwaltung {
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Inforaum -1030"),schulgraph.getVertex("Inforaum -1029"),5));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Inforaum -1030"),schulgraph.getVertex("Schulzoo"),17));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Inforaum -1030"),schulgraph.getVertex("Treppenhaus NW Trakt"),13));
-        schulgraph.addEdge(new Edge(schulgraph.getVertex("Schulzoo"),schulgraph.getVertex("Chemiraum 1031"),7));
+        schulgraph.addEdge(new Edge(schulgraph.getVertex("Schulzoo"),schulgraph.getVertex("Chemieraum 1031"),7));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Schulzoo"),schulgraph.getVertex("Bioraum 1028"),7));
-        schulgraph.addEdge(new Edge(schulgraph.getVertex("Chemiraum 1031"),schulgraph.getVertex("Bioraum 1028"),4));
-        schulgraph.addEdge(new Edge(schulgraph.getVertex("Chemiraum 1031"),schulgraph.getVertex("Treppenhaus NW Trakt"),22));
+        schulgraph.addEdge(new Edge(schulgraph.getVertex("Chemieraum 1031"),schulgraph.getVertex("Bioraum 1028"),4));
+        schulgraph.addEdge(new Edge(schulgraph.getVertex("Chemieraum 1031"),schulgraph.getVertex("Treppenhaus NW Trakt"),22));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Bioraum 1028"),schulgraph.getVertex("Treppenhaus NW Trakt"),21));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Inforaum -1030"),schulgraph.getVertex("Fußballplatz"),34));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Inforaum -1030"),schulgraph.getVertex("Sporthalle"),95));
@@ -128,35 +128,42 @@ public class verwaltung {
             speicher.next();
         }
         for (int i=0;i<(lange)*(lange);i++) {
-            //if ((i / lange) + 1 != (i % lange) + 1) {
+
+            if ((i / lange) + 1 != (i % lange) + 1) {
+
                 Edge sp=schulgraph.getEdge(schulgraph.getVertex(rueckgabeMatrix[0][(i % lange) + 1]), schulgraph.getVertex(rueckgabeMatrix[(i / lange) + 1][0]));
                 if (sp!=null) {
                     rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1] =""+(int)sp.getWeight();
                 }else{
                     rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1]=" ";
                 }
-            //}
+            }else{
+                rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1]="/";
+            }
         }
         return rueckgabeMatrix;
     }
 
+    /**
+     * Gibt ein Mitgegebenes Zwei dimensionales Array in der darstellung einer Tabelle aus
+     * @param pMatrix ,ist das zweidimensionale Array welches ausgegeben wird
+     */
     public void Matrixausgabe(String[][] pMatrix){
-        int spaltenbreite=0;
-        for (int a=0;a< pMatrix.length;a++) {
-            for (int i = 0; i < pMatrix.length; i++) {
-                System.out.print("|"+pMatrix[i][a]);
-                for (int c=pMatrix[i][a].length();c<pMatrix[i][0].length();c++){
+        int zeilenbreite=0;/* speicher wie breit eine Zeile sein muss */
+        for (int a=0;a< pMatrix.length;a++) {/*geht Zeile für Zeile die Tabelle durch*/
+            for (int i = 0; i < pMatrix.length; i++) {/*geht Spalte für Spalte die Tabelle durch*/
+                System.out.print("|"+pMatrix[i][a]);/*Ausgabe von "|" + das element in der zelle der Tabelle*/
+                for (int c=pMatrix[i][a].length();c<pMatrix[i][0].length();c++){/*Sorgt dafür, dass die Zelle so breit wird wie die oberste Zelle der Spalte*/
                     System.out.print(" ");
                 }
-                spaltenbreite+=pMatrix[i][0].length()+1;
+                zeilenbreite+=pMatrix[i][0].length()+1;/*erhöht die zeilenbreite um die Breite der Spalte*/
             }
-            System.out.println("|");
-            for (int z=0;z<spaltenbreite;z++){
+            System.out.println("|");/*Schließt die Zeile*/
+            for (int z=0;z<zeilenbreite;z++){/*fuegt eine Zeile mit ausschließlich "-----" ein mit der Breite der Zeile*/
                 System.out.print("-");
             }
-            System.out.println("-");
-            spaltenbreite=0;
-
+            System.out.println("-");/*Beendet die "------" Zeile*/
+            zeilenbreite=0;
         }
     }
     //hendrik stinkt
