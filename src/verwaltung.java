@@ -166,6 +166,4 @@ public class verwaltung {
             zeilenbreite=0;
         }
     }
-    //hendrik stinkt und tom auch !!!!!!!!!!!!3e49uhghqh5ugqegeqg besim ist langweilig
-
 }
