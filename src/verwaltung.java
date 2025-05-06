@@ -4,7 +4,7 @@ import untils.graph.*;
 public class verwaltung {
     public static void main(String[] args) {
         new verwaltung();
-        System.out.println("Herzlich willkommen zu Zeichenketten verschluesselerer!");
+        System.out.println("Herzlich willkommen zum Schulgraphen!");
     }
     public verwaltung(){
         schulgraph.addVertex(new Vertex("Inforaum -1030"));
