@@ -128,7 +128,9 @@ public class verwaltung {
             speicher.next();
         }
         for (int i=0;i<(lange)*(lange);i++) {
+
             if ((i / lange) + 1 != (i % lange) + 1) {
+
                 Edge sp=schulgraph.getEdge(schulgraph.getVertex(rueckgabeMatrix[0][(i % lange) + 1]), schulgraph.getVertex(rueckgabeMatrix[(i / lange) + 1][0]));
                 if (sp!=null) {
                     rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1] =""+(int)sp.getWeight();
@@ -162,7 +164,6 @@ public class verwaltung {
             }
             System.out.println("-");/*Beendet die "------" Zeile*/
             zeilenbreite=0;
-
         }
     }
 }
