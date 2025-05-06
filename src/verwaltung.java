@@ -166,5 +166,5 @@ public class verwaltung {
             zeilenbreite=0;
         }
     }
-    //hendrik stinkt
+    //hendrik stinkt und tom auch
 }
