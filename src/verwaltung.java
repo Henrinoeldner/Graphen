@@ -11,6 +11,14 @@ public class verwaltung {
         new verwaltung();
 
     }
+
+    /**
+     *
+     * Die Methode verwaltung() erstellt und initialisiert einen gewichteten Schulgraphen,
+     * der das Schuhlgelände abbildet. Die Knoten repräsentieren
+     * verschiedene Orte auf dem Gelände (z.b Räume, Eingänge unsw), während die Kanten die
+     * Wege (mit Distanz in Metern) zwischen diesen Orten beschreiben.
+     */
     public verwaltung(){
         schulgraph.addVertex(new Vertex("Inforaum -1030"));
         schulgraph.addVertex(new Vertex("Aula"));
@@ -39,7 +47,7 @@ public class verwaltung {
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Aula"),schulgraph.getVertex("Cafeteria"),9));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Aula"),schulgraph.getVertex("WC"),15));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Aula"),schulgraph.getVertex("Inforaum -1030"),95));
-        schulgraph.addEdge(new Edge(schulgraph.getVertex("Aula"),schulgraph.getVertex("Kunstraumraum -1011"),71));
+        schulgraph.addEdge(new Edge(schulgraph.getVertex("Aula"),schulgraph.getVertex("Kunstraum -1011"),71));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("WC"),schulgraph.getVertex("Inforaum -1030"),80));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("WC"),schulgraph.getVertex("Cafeteria"),22));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Kunstraum -1011"),schulgraph.getVertex("Inforaum -1030"),64));
@@ -87,6 +95,12 @@ public class verwaltung {
         this.Matrixausgabe(MatrixErstellen());
     }
 
+    /**
+     * Die Methode Breitensuche() traversiert alle Knoten des Graphens vom Startknoten ausgehend.
+     * Es wird Schichtenweise traversiert wobei erst alle Nachbarn des Startknotens besucht werden,
+     * die Nachbarn dieser Nachbarn und so weiter. Die Traversierung wird am ende ausgegeben.
+     * @return ruekgabeListe
+     */
     public List<Vertex> Breitensuche(){
         List<Vertex> ruekgabeListe=new List<>();
         Queue<Vertex> zubesuchen= new Queue<>();
@@ -111,7 +125,13 @@ public class verwaltung {
         return  ruekgabeListe;
     }
 
+    /**
+     * Die Methode MatrixErstellen() erstellt mit hilfe eines 2D Arrays eine Matrix in welcher alle
+     * Knoten und Gewichtungen enthalten sind.
+     *
+     */
     public String[][] MatrixErstellen(){
+        //speichert all Knoten im Schulgraph in einer Liste
         List<Vertex> speicher= this.Breitensuche();
         int lange=0;
         speicher.toFirst();
@@ -119,6 +139,7 @@ public class verwaltung {
             lange++;
             speicher.next();
         }
+
         speicher.toFirst();
         String[][] rueckgabeMatrix =new String[lange+1][lange+1];
         rueckgabeMatrix[0][0]="                        ";
