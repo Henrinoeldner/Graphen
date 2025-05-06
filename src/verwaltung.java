@@ -1,14 +1,21 @@
 import untils.*;
 import untils.graph.*;
 
-import java.util.Scanner;
-
 public class verwaltung {
-    Graph schulgraph=   new Graph();
-    Scanner scanner=new Scanner(System.in);
+    Graph schulgraph = new Graph();
     public static void main(String[] args) {
         System.out.println("Herzlich willkommen zu Schulenavigator !");
-        new verwaltung();
+        verwaltung verwaltung = new verwaltung();
+
+
+        //diese funktionsaufrufe zur main methode geholt um lesbarkeit zu verbessern.
+
+        //suchfunktionen
+        verwaltung.Breitensuche();
+        verwaltung.Tiefensuche();
+
+        //Matrix
+        verwaltung.Matrixausgabe(verwaltung.MatrixErstellen());
 
     }
 
@@ -20,26 +27,37 @@ public class verwaltung {
      * Wege (mit Distanz in Metern) zwischen diesen Orten beschreiben.
      */
     public verwaltung(){
-        schulgraph.addVertex(new Vertex("Inforaum -1030"));
-        schulgraph.addVertex(new Vertex("Aula"));
-        schulgraph.addVertex(new Vertex("PZ"));
-        schulgraph.addVertex(new Vertex("Mensa"));
-        schulgraph.addVertex(new Vertex("Lehrerzimmer"));
-        schulgraph.addVertex(new Vertex("Cafeteria"));
-        schulgraph.addVertex(new Vertex("WC"));
-        schulgraph.addVertex(new Vertex("Tor(Rn)"));
-        schulgraph.addVertex(new Vertex("Secretariat"));
-        schulgraph.addVertex(new Vertex("Kunstraum -1011"));
-        schulgraph.addVertex(new Vertex("Musikraum -1008"));
-        schulgraph.addVertex(new Vertex("Sporthalle"));
-        schulgraph.addVertex(new Vertex("Radkeller"));
-        schulgraph.addVertex(new Vertex("TischtenPlatten"));
-        schulgraph.addVertex(new Vertex("Tor(SF)"));
-        schulgraph.addVertex(new Vertex("Fußballplatz"));
-        schulgraph.addVertex(new Vertex("Schulzoo"));
-        schulgraph.addVertex(new Vertex("Inforaum -1029"));
-        schulgraph.addVertex(new Vertex("Chemieraum 1031"));
-        schulgraph.addVertex(new Vertex("Bioraum 1028"));
+
+        String[] raeume = {
+                "Inforaum -1030",
+                "Aula",
+                "PZ",
+                "Mensa",
+                "Lehrerzimmer",
+                "Cafeteria",
+                "WC",
+                "Tor(Rn)",
+                "Sekretariat",
+                "Kunstraum -1011",
+                "Musikraum -1008",
+                "Sporthalle",
+                "Radkeller",
+                "TischtenPlatten",
+                "Tor(SF)",
+                "Fußballplatz",
+                "Schulzoo",
+                "Inforaum -1029",
+                "Chemieraum 1031",
+                "Bioraum 1028",
+                "Treppenhaus NW Trakt"
+            };
+
+        //Dem Graphen schulgraph einen Knoten für jeden raum hinzufuegen
+        for (String s : raeume) {
+            schulgraph.addVertex((new Vertex(s)));
+        }
+
+
         schulgraph.addVertex(new Vertex("Treppenhaus NW Trakt"));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Mensa"),schulgraph.getVertex("Lehrerzimmer"),96));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Mensa"),schulgraph.getVertex("Cafeteria"),7));
@@ -90,9 +108,6 @@ public class verwaltung {
             speicher.next();
         }
         */
-
-        this.Breitensuche();
-        this.Matrixausgabe(MatrixErstellen());
     }
 
     /**
@@ -102,27 +117,27 @@ public class verwaltung {
      * @return ruekgabeListe
      */
     public List<Vertex> Breitensuche(){
-        List<Vertex> ruekgabeListe=new List<>();
-        Queue<Vertex> zubesuchen= new Queue<>();
-        List<Vertex> ergebinsListe=new List<>();
+        List<Vertex> rueckgabeListe = new List<>();
+        Queue<Vertex> zubesuchen = new Queue<>();
+        List<Vertex> ergebnisListe = new List<>();
         zubesuchen.enqueue(schulgraph.getVertex("Inforaum -1030"));
         zubesuchen.front().setMark(true);
         do{
             System.out.println(zubesuchen.front().getID());
-            ruekgabeListe.append(zubesuchen.front());
-            ergebinsListe=schulgraph.getNeighbours(zubesuchen.front());
-            ergebinsListe.toFirst();
-            while (ergebinsListe.hasAccess()){
-                if (!ergebinsListe.getContent().isMarked()){
-                    zubesuchen.enqueue(ergebinsListe.getContent());
-                    ergebinsListe.getContent().setMark(true);
+            rueckgabeListe.append(zubesuchen.front());
+            ergebnisListe = schulgraph.getNeighbours(zubesuchen.front());
+            ergebnisListe.toFirst();
+            while (ergebnisListe.hasAccess()){
+                if (!ergebnisListe.getContent().isMarked()){
+                    zubesuchen.enqueue(ergebnisListe.getContent());
+                    ergebnisListe.getContent().setMark(true);
                 }
-                ergebinsListe.next();
+                ergebnisListe.next();
             }
             zubesuchen.dequeue();
         }while(!zubesuchen.isEmpty());
         schulgraph.setAllVertexMarks(false);
-        return  ruekgabeListe;
+        return  rueckgabeListe;
     }
 
     /**
@@ -132,7 +147,7 @@ public class verwaltung {
      */
     public String[][] MatrixErstellen(){
         //speichert all Knoten im Schulgraph in einer Liste
-        List<Vertex> speicher= this.Breitensuche();
+        List<Vertex> speicher = this.Breitensuche();
         int lange=0;
         speicher.toFirst();
         while (speicher.hasAccess()){
@@ -187,5 +202,41 @@ public class verwaltung {
             zeilenbreite=0;
         }
     }
+
+    //Waehlt einen standard startpunkt wenn vom benutzer keiner festgelegt wurde.
+    public List<Vertex> Tiefensuche(){
+        return Tiefensuche("Inforaum -1030");
+    }
+
+    public List<Vertex> Tiefensuche(String VertexID){
+        List<Vertex> rueckgabeliste = new List<Vertex>();
+
+        Stack<Vertex> zuBesuchen = new Stack<>();
+
+        zuBesuchen.push(schulgraph.getVertex(VertexID));
+
+        schulgraph.setAllVertexMarks(false);
+
+        do{
+            System.out.println(zuBesuchen.top().getID());
+            rueckgabeliste.append(zuBesuchen.top());
+            List<Vertex> nachbarn = schulgraph.getNeighbours(zuBesuchen.top());
+            zuBesuchen.pop();
+
+            nachbarn.toFirst();
+
+            while(nachbarn.hasAccess()){
+                if(!nachbarn.getContent().isMarked()) {
+                    nachbarn.getContent().setMark(true);
+                    zuBesuchen.push(nachbarn.getContent());
+                }
+                nachbarn.next();
+            }
+
+        }while(!zuBesuchen.isEmpty());
+
+
+        schulgraph.setAllVertexMarks(false);
+        return rueckgabeliste;
+    }
 }
-//test
