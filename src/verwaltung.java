@@ -1,10 +1,13 @@
 import untils.*;
 import untils.graph.*;
+import java.util.Scanner;
 
 public class verwaltung {
+    Graph schulgraph=   new Graph();
+    Scanner scanner=new Scanner(System.in);
     public static void main(String[] args) {
-        new verwaltung();
         System.out.println("Herzlich willkommen zum Schulgraphen!");
+        new verwaltung();
     }
     public verwaltung(){
         schulgraph.addVertex(new Vertex("Inforaum -1030"));
