@@ -68,6 +68,11 @@ public class verwaltung {
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Tor(Rn)"),schulgraph.getVertex("Secretariat"),18));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Lehrerzimmer"),schulgraph.getVertex("Radkeller"),27));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Secretariat"),schulgraph.getVertex("Radkeller"),26));
+    }
+    public List<Vertex> Breitensuche() {
+        List<Vertex> ergebnisliste
+
+
 
 
     }
