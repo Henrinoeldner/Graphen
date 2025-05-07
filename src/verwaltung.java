@@ -163,7 +163,7 @@ public class verwaltung {
                 System.out.print("-");
             }
             System.out.println("-");/*Beendet die "------" Zeile*/
-            zeilenbreite=0;
+            zeilenbreite=0;/*setzt die Zeilenbreite zurueck auf null, damit sie nicht immer weiter erhoet wird*/
         }
     }
 }
