@@ -8,10 +8,9 @@ public class verwaltung {
     Scanner scanner=new Scanner(System.in);
     public static void main(String[] args) {
         System.out.println("Herzlich willkommen zu Schulenavigator !");
-        new verwaltung();
-
+        verwaltung Verwaltung=new verwaltung();
+        Verwaltung.Auswahl();
     }
-
     /**
      *
      * Die Methode verwaltung() erstellt und initialisiert einen gewichteten Schulgraphen,
@@ -78,21 +77,24 @@ public class verwaltung {
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Tor(Rn)"),schulgraph.getVertex("Secretariat"),18));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Lehrerzimmer"),schulgraph.getVertex("Radkeller"),27));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Secretariat"),schulgraph.getVertex("Radkeller"),26));
+    }
 
-/*
-        System.out.println("Von welchen Ort möchtest du die Nachbarn wissen?");
-        Vertex gesucht = schulgraph.getVertex(scanner.nextLine());
-        List<Vertex> speicher= schulgraph.getNeighbours(gesucht);
-        speicher.toFirst();
-        while (speicher.hasAccess()){
-            System.out.print(speicher.getContent().getID()+" entfernung: ");
-            System.out.println(schulgraph.getEdge(gesucht,speicher.getContent()).getWeight()+" meter");
-            speicher.next();
+    public void Auswahl(){
+        int option;
+        while (true){
+            System.out.println("Welche Methode möchtest du testen? Bitte gebe die Zugewiesene Nummer ein und drücke Enter.");
+            System.out.println("[1]Breitensuche");
+            System.out.println("[2]Tiefensuche");
+            System.out.println("[3]Matrixausgabe");
+            option=scanner.nextInt();
+            if (option==1){
+                this.Listeausgeben(Breitensuche());
+            }else if(option==2){
+                this.Listeausgeben(Tiefensuche());
+            }else if(option==3){
+                this.Matrixausgabe(MatrixErstellen());
+            }
         }
-        */
-
-        this.Breitensuche();
-        this.Matrixausgabe(MatrixErstellen());
     }
 
     /**
@@ -187,5 +189,38 @@ public class verwaltung {
             zeilenbreite=0;/*setzt die Zeilenbreite zurueck auf null, damit sie nicht immer weiter erhoet wird*/
         }
     }
+
+    public List<Vertex> Tiefensuche(){
+        schulgraph.setAllVertexMarks(false);
+        List<Vertex> rueckgabeliste=new List<>();
+        rueckgabeliste= Tiefensucheintern(schulgraph.getVertex("PZ"),rueckgabeliste);
+        schulgraph.setAllVertexMarks(false);
+        return rueckgabeliste;
+
+    }
+
+    private List<Vertex> Tiefensucheintern(Vertex aktuellervertex, List<Vertex> pListe){
+        aktuellervertex.setMark(true);
+        pListe.append(aktuellervertex);
+        List<Vertex> nachbar=schulgraph.getNeighbours(aktuellervertex);
+        nachbar.toFirst();
+        while (nachbar.hasAccess()){
+            if (!nachbar.getContent().isMarked()){
+                pListe=Tiefensucheintern(nachbar.getContent(),pListe);
+            }
+            nachbar.next();
+        }
+
+        return  pListe;
+    }
+
+    public void Listeausgeben(List<Vertex> pList){
+        pList.toFirst();
+        while (pList.hasAccess()){
+            System.out.println(pList.getContent().getID());
+            pList.next();
+        }
+    }
 }
-//test
+
+
