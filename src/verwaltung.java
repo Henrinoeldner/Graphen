@@ -86,13 +86,16 @@ public class verwaltung {
             System.out.println("[1]Breitensuche");
             System.out.println("[2]Tiefensuche");
             System.out.println("[3]Matrixausgabe");
+            System.out.println("[4]TiefensucheRekusive");
             option=scanner.nextInt();
             if (option==1){
                 this.Listeausgeben(Breitensuche());
             }else if(option==2){
-                this.Listeausgeben(Tiefensuche());
+                this.Listeausgeben(TiefensucheRekusiv());
             }else if(option==3){
                 this.Matrixausgabe(MatrixErstellen());
+            }else if(option==4){
+                this.Listeausgeben(TiefensucheRekusiv());
             }
         }
     }
@@ -190,23 +193,23 @@ public class verwaltung {
         }
     }
 
-    public List<Vertex> Tiefensuche(){
+    public List<Vertex> TiefensucheRekusiv(){
         schulgraph.setAllVertexMarks(false);
         List<Vertex> rueckgabeliste=new List<>();
-        rueckgabeliste= Tiefensucheintern(schulgraph.getVertex("PZ"),rueckgabeliste);
+        rueckgabeliste= TiefensucheinternRekusiv(schulgraph.getVertex("PZ"),rueckgabeliste);
         schulgraph.setAllVertexMarks(false);
         return rueckgabeliste;
 
     }
 
-    private List<Vertex> Tiefensucheintern(Vertex aktuellervertex, List<Vertex> pListe){
+    private List<Vertex> TiefensucheinternRekusiv(Vertex aktuellervertex, List<Vertex> pListe){
         aktuellervertex.setMark(true);
         pListe.append(aktuellervertex);
         List<Vertex> nachbar=schulgraph.getNeighbours(aktuellervertex);
         nachbar.toFirst();
         while (nachbar.hasAccess()){
             if (!nachbar.getContent().isMarked()){
-                pListe=Tiefensucheintern(nachbar.getContent(),pListe);
+                pListe=TiefensucheinternRekusiv(nachbar.getContent(),pListe);
             }
             nachbar.next();
         }
