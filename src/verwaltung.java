@@ -114,7 +114,7 @@ public class verwaltung {
             if (option==1){
                 this.Listeausgeben(Breitensuche());
             }else if(option==2){
-                this.Listeausgeben(TiefensucheRekusiv());
+                this.Listeausgeben(Tiefensuche());
             }else if(option==3){
                 this.Matrixausgabe(MatrixErstellen());
             }else if(option==4){
