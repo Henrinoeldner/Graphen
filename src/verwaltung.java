@@ -114,7 +114,7 @@ public class verwaltung {
             if (option==1){
                 this.Listeausgeben(Breitensuche());
             }else if(option==2){
-                this.Listeausgeben(Tiefensuche());
+                this.Listeausgeben(Tiefensuche("Inforaum -1030"));
             }else if(option==3){
                 this.Matrixausgabe(MatrixErstellen());
             }else if(option==4){
@@ -274,6 +274,8 @@ public class verwaltung {
 
         zuBesuchen.push(schulgraph.getVertex(VertexID));
         schulgraph.setAllVertexMarks(false);
+        zuBesuchen.push(schulgraph.getVertex(VertexID));
+        schulgraph.getVertex(VertexID).setMark(true);
 
         do {
             System.out.println(zuBesuchen.top().getID());
@@ -295,6 +297,15 @@ public class verwaltung {
         schulgraph.setAllVertexMarks(false);
         return reihenfolge;
     }
+/*
+    public List<Vertex> Dijkstra (Vertex StartVertex,Vertex ZielVertex){
+        List<Vertex> rueckgabeList=new List<>();
+        List<Vertex> nachbarn =new List<>();
+        return rueckgabeList;
+    }
+    private List<Vertex> Dijkstraintern()
+    */
+
 }
 
 
