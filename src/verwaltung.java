@@ -1,29 +1,22 @@
 import untils.*;
 import untils.graph.*;
 
-public class verwaltung {
-    Graph schulgraph = new Graph();
+import java.util.Scanner;
 
+public class verwaltung {
+    Graph schulgraph=   new Graph();
+    Scanner scanner=new Scanner(System.in);
     public static void main(String[] args) {
         System.out.println("Herzlich willkommen zu Schulenavigator !");
-        verwaltung verwaltung = new verwaltung();
-
-
-        //diese funktionsaufrufe zur main methode geholt um lesbarkeit zu verbessern.
-
-        //suchfunktionen
-        verwaltung.Breitensuche();
-        verwaltung.Tiefensuche();
-
-        //Matrix
-        verwaltung.Matrixausgabe(verwaltung.MatrixErstellen());
-
+        verwaltung Verwaltung=new verwaltung();
+        Verwaltung.Auswahl();
     }
 
     /**
+     *
      * Die Methode verwaltung() erstellt und initialisiert einen gewichteten Schulgraphen,
-     * der das Schulgelände abbildet. Die Knoten repräsentieren
-     * verschiedene Orte auf dem Gelände (z.b Räume, Eingänge usw), während die Kanten die
+     * der das Schuhlgelände abbildet. Die Knoten repräsentieren
+     * verschiedene Orte auf dem Gelände (z.b Räume, Eingänge unsw), während die Kanten die
      * Wege (mit Distanz in Metern) zwischen diesen Orten beschreiben.
      */
     public verwaltung() {
@@ -95,7 +88,7 @@ public class verwaltung {
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Tor(Rn)"), schulgraph.getVertex("Secretariat"), 18));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Lehrerzimmer"), schulgraph.getVertex("Radkeller"), 27));
         schulgraph.addEdge(new Edge(schulgraph.getVertex("Secretariat"), schulgraph.getVertex("Radkeller"), 26));
-
+    }
 /*
         System.out.println("Von welchen Ort möchtest du die Nachbarn wissen?");
         Vertex gesucht = schulgraph.getVertex(scanner.nextLine());
@@ -107,73 +100,94 @@ public class verwaltung {
             speicher.next();
         }
         */
+
+
+    public void Auswahl(){
+        int option;
+        while (true){
+            System.out.println("Welche Methode möchtest du testen? Bitte gebe die Zugewiesene Nummer ein und drücke Enter.");
+            System.out.println("[1]Breitensuche");
+            System.out.println("[2]Tiefensuche");
+            System.out.println("[3]Matrixausgabe");
+            System.out.println("[4]TiefensucheRekusive");
+            option=scanner.nextInt();
+            if (option==1){
+                this.Listeausgeben(Breitensuche());
+            }else if(option==2){
+                this.Listeausgeben(Tiefensuche());
+            }else if(option==3){
+                this.Matrixausgabe(MatrixErstellen());
+            }else if(option==4){
+                this.Listeausgeben(TiefensucheRekusiv());
+            }
+        }
     }
 
     /**
      * Die Methode Breitensuche() traversiert alle Knoten des Graphens vom Startknoten ausgehend.
      * Es wird Schichtenweise traversiert wobei erst alle Nachbarn des Startknotens besucht werden,
      * die Nachbarn dieser Nachbarn und so weiter. Die Traversierung wird am ende ausgegeben.
-     *
-     * @return rueckgabeListe
+     * @return ruekgabeListe
      */
-    public List<Vertex> Breitensuche() {
-        List<Vertex> rueckgabeListe = new List<>();
-        Queue<Vertex> zubesuchen = new Queue<>();
-        List<Vertex> ergebnisListe = new List<>();
+    public List<Vertex> Breitensuche(){
+        List<Vertex> ruekgabeListe=new List<>();
+        Queue<Vertex> zubesuchen= new Queue<>();
+        List<Vertex> ergebinsListe=new List<>();
         zubesuchen.enqueue(schulgraph.getVertex("Inforaum -1030"));
         zubesuchen.front().setMark(true);
-        do {
+        do{
             System.out.println(zubesuchen.front().getID());
-            rueckgabeListe.append(zubesuchen.front());
-            ergebnisListe = schulgraph.getNeighbours(zubesuchen.front());
-            ergebnisListe.toFirst();
-            while (ergebnisListe.hasAccess()) {
-                if (!ergebnisListe.getContent().isMarked()) {
-                    ergebnisListe.getContent().setMark(true);
-                    zubesuchen.enqueue(ergebnisListe.getContent());
+            ruekgabeListe.append(zubesuchen.front());
+            ergebinsListe=schulgraph.getNeighbours(zubesuchen.front());
+            ergebinsListe.toFirst();
+            while (ergebinsListe.hasAccess()){
+                if (!ergebinsListe.getContent().isMarked()){
+                    zubesuchen.enqueue(ergebinsListe.getContent());
+                    ergebinsListe.getContent().setMark(true);
                 }
-                ergebnisListe.next();
+                ergebinsListe.next();
             }
             zubesuchen.dequeue();
-        } while (!zubesuchen.isEmpty());
+        }while(!zubesuchen.isEmpty());
         schulgraph.setAllVertexMarks(false);
-        return rueckgabeListe;
+        return  ruekgabeListe;
     }
 
     /**
      * Die Methode MatrixErstellen() erstellt mit hilfe eines 2D Arrays eine Matrix in welcher alle
      * Knoten und Gewichtungen enthalten sind.
+     *
      */
-    public String[][] MatrixErstellen() {
+    public String[][] MatrixErstellen(){
         //speichert all Knoten im Schulgraph in einer Liste
-        List<Vertex> speicher = this.Breitensuche();
-        int lange = 0;
+        List<Vertex> speicher= this.Breitensuche();
+        int lange=0;
         speicher.toFirst();
-        while (speicher.hasAccess()) {
+        while (speicher.hasAccess()){
             lange++;
             speicher.next();
         }
 
         speicher.toFirst();
-        String[][] rueckgabeMatrix = new String[lange + 1][lange + 1];
-        rueckgabeMatrix[0][0] = "                        ";
-        for (int i = 1; i < lange + 1; i++) {
-            rueckgabeMatrix[i][0] = speicher.getContent().getID();
-            rueckgabeMatrix[0][i] = speicher.getContent().getID();
+        String[][] rueckgabeMatrix =new String[lange+1][lange+1];
+        rueckgabeMatrix[0][0]="                        ";
+        for (int i=1;i<lange+1;i++){
+            rueckgabeMatrix[i][0]=speicher.getContent().getID();
+            rueckgabeMatrix[0][i]=speicher.getContent().getID();
             speicher.next();
         }
-        for (int i = 0; i < (lange) * (lange); i++) {
+        for (int i=0;i<(lange)*(lange);i++) {
 
             if ((i / lange) + 1 != (i % lange) + 1) {
 
-                Edge sp = schulgraph.getEdge(schulgraph.getVertex(rueckgabeMatrix[0][(i % lange) + 1]), schulgraph.getVertex(rueckgabeMatrix[(i / lange) + 1][0]));
-                if (sp != null) {
-                    rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1] = "" + (int) sp.getWeight();
-                } else {
-                    rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1] = " ";
+                Edge sp=schulgraph.getEdge(schulgraph.getVertex(rueckgabeMatrix[0][(i % lange) + 1]), schulgraph.getVertex(rueckgabeMatrix[(i / lange) + 1][0]));
+                if (sp!=null) {
+                    rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1] =""+(int)sp.getWeight();
+                }else{
+                    rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1]=" ";
                 }
-            } else {
-                rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1] = "/";
+            }else{
+                rueckgabeMatrix[(i / lange) + 1][(i % lange) + 1]="/";
             }
         }
         return rueckgabeMatrix;
@@ -181,25 +195,56 @@ public class verwaltung {
 
     /**
      * Gibt ein Mitgegebenes Zwei dimensionales Array in der darstellung einer Tabelle aus
-     *
      * @param pMatrix ,ist das zweidimensionale Array welches ausgegeben wird
      */
-    public void Matrixausgabe(String[][] pMatrix) {
-        int zeilenbreite = 0;/* speicher wie breit eine Zeile sein muss */
-        for (int a = 0; a < pMatrix.length; a++) {/*geht Zeile für Zeile die Tabelle durch*/
+    public void Matrixausgabe(String[][] pMatrix){
+        int zeilenbreite=0;/* speicher wie breit eine Zeile sein muss */
+        for (int a=0;a< pMatrix.length;a++) {/*geht Zeile für Zeile die Tabelle durch*/
             for (int i = 0; i < pMatrix.length; i++) {/*geht Spalte für Spalte die Tabelle durch*/
-                System.out.print("|" + pMatrix[i][a]);/*Ausgabe von "|" + das element in der zelle der Tabelle*/
-                for (int c = pMatrix[i][a].length(); c < pMatrix[i][0].length(); c++) {/*Sorgt dafür, dass die Zelle so breit wird wie die oberste Zelle der Spalte*/
+                System.out.print("|"+pMatrix[i][a]);/*Ausgabe von "|" + das element in der zelle der Tabelle*/
+                for (int c=pMatrix[i][a].length();c<pMatrix[i][0].length();c++){/*Sorgt dafür, dass die Zelle so breit wird wie die oberste Zelle der Spalte*/
                     System.out.print(" ");
                 }
-                zeilenbreite += pMatrix[i][0].length() + 1;/*erhöht die zeilenbreite um die Breite der Spalte*/
+                zeilenbreite+=pMatrix[i][0].length()+1;/*erhöht die zeilenbreite um die Breite der Spalte*/
             }
             System.out.println("|");/*Schließt die Zeile*/
-            for (int z = 0; z < zeilenbreite; z++) {/*fuegt eine Zeile mit ausschließlich "-----" ein mit der Breite der Zeile*/
+            for (int z=0;z<zeilenbreite;z++){/*fuegt eine Zeile mit ausschließlich "-----" ein mit der Breite der Zeile*/
                 System.out.print("-");
             }
             System.out.println("-");/*Beendet die "------" Zeile*/
-            zeilenbreite = 0;
+            zeilenbreite=0;/*setzt die Zeilenbreite zurueck auf null, damit sie nicht immer weiter erhoet wird*/
+        }
+    }
+
+    public List<Vertex> TiefensucheRekusiv(){
+        schulgraph.setAllVertexMarks(false);
+        List<Vertex> rueckgabeliste=new List<>();
+        rueckgabeliste= TiefensucheinternRekusiv(schulgraph.getVertex("PZ"),rueckgabeliste);
+        schulgraph.setAllVertexMarks(false);
+        return rueckgabeliste;
+
+    }
+
+    private List<Vertex> TiefensucheinternRekusiv(Vertex aktuellervertex, List<Vertex> pListe){
+        aktuellervertex.setMark(true);
+        pListe.append(aktuellervertex);
+        List<Vertex> nachbar=schulgraph.getNeighbours(aktuellervertex);
+        nachbar.toFirst();
+        while (nachbar.hasAccess()){
+            if (!nachbar.getContent().isMarked()){
+                pListe=TiefensucheinternRekusiv(nachbar.getContent(),pListe);
+            }
+            nachbar.next();
+        }
+
+        return  pListe;
+    }
+
+    public void Listeausgeben(List<Vertex> pList){
+        pList.toFirst();
+        while (pList.hasAccess()){
+            System.out.println(pList.getContent().getID());
+            pList.next();
         }
     }
 
@@ -251,3 +296,5 @@ public class verwaltung {
         return reihenfolge;
     }
 }
+
+
